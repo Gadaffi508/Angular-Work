@@ -1,0 +1,22 @@
+<div class="container py-5">
+  <h2 class="text-white text-center mb-4">📊 Anket Sonuçları</h2>
+  <div class="row g-4">
+    <div class="col-12" *ngFor="let result of results">
+      <div class="card text-white bg-dark shadow border-success">
+        <div class="card-header">
+          <strong>{{ result.title }}</strong>
+        </div>
+        <div class="card-body">
+          <div *ngFor="let opt of result.options" class="mb-3">
+            <h5 class="text-success">{{ opt.option }} - {{ opt.votes }} Oy</h5>
+            <div class="progress">
+              <div class="progress-bar bg-success" [style.width.%]="opt.percentage">
+                {{ opt.percentage }}%
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

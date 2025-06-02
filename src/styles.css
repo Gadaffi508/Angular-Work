@@ -1,0 +1,38 @@
+body {
+  background-color: #121212;
+  color: #ffffff;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.card {
+  border-radius: 10px;
+}
+
+.card-title {
+  font-weight: bold;
+}
+
+input, textarea, select {
+  background-color: #1e1e1e !important;
+  color: white !important;
+}
+
+.btn-outline-light:hover {
+  background-color: white;
+  color: black;
+}
+
+.card-header {
+  font-weight: bold;
+}
+
+
+.container {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+.btn-primary {
+  background-color: #00bcd4;
+  border-color: #00bcd4;
+}

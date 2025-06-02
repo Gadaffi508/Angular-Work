@@ -1,0 +1,39 @@
+<div class="container py-5">
+  <h2 class="text-white text-center mb-4">📝 Anket Oluştur</h2>
+  <form class="row g-4">
+
+    <div *ngFor="let q of polls; let i = index" class="col-12">
+      <div class="card bg-dark text-white border-secondary p-3">
+        <div class="mb-3">
+          <label class="form-label">Soru {{ i + 1 }}</label>
+          <input type="text" class="form-control bg-dark text-white border-secondary" [(ngModel)]="q.question" name="question{{i}}">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Soru Tipi</label>
+          <select class="form-select bg-dark text-white border-secondary" [(ngModel)]="q.type" name="type{{i}}">
+            <option value="multiple">Çoktan Seçmeli</option>
+            <option value="checkbox">Çoklu Seçim</option>
+            <option value="text">Açık Uçlu</option>
+          </select>
+        </div>
+
+        <div *ngIf="q.type !== 'text'">
+          <label class="form-label">Seçenekler</label>
+          <div *ngFor="let opt of q.options; let j = index" class="mb-2">
+            <input type="text" class="form-control bg-dark text-white border-secondary" [(ngModel)]="q.options[j]" name="option{{i}}{{j}}">
+          </div>
+          <button type="button" class="btn btn-outline-light btn-sm" (click)="addOption(i)">+ Seçenek Ekle</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 text-end">
+      <button class="btn btn-outline-info" type="button" (click)="addQuestion()">+ Soru Ekle</button>
+    </div>
+
+    <div class="col-12">
+      <button class="btn btn-success w-100">Anketi Oluştur</button>
+    </div>
+  </form>
+</div>

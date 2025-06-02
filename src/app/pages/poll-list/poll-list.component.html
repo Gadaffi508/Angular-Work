@@ -1,0 +1,23 @@
+<div class="container py-5">
+  <h2 class="text-center text-white mb-4">📋 Aktif Anketler</h2>
+  <div class="row g-4">
+    <div class="col-sm-6 col-md-4 col-lg-3" *ngFor="let poll of polls; let i = index">
+      <div class="card text-white bg-dark h-100 shadow">
+        <div class="card-header border-info">
+          <strong>Anket #{{ i + 1 }}</strong>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title text-info">{{ poll.title }}</h5>
+          <p class="card-text">{{ poll.description }}</p>
+          <div class="d-grid gap-2">
+            <button class="btn btn-outline-info btn-sm">Oyla</button>
+            <a [routerLink]="['/results']" class="btn btn-outline-light btn-sm">Sonucu Gör</a>
+          </div>
+        </div>
+        <div class="card-footer text-muted small text-end">
+          Bitiş: {{ poll.endDate }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
