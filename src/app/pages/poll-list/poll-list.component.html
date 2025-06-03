@@ -10,7 +10,8 @@
           <h5 class="card-title text-info">{{ poll.title }}</h5>
           <p class="card-text">{{ poll.description }}</p>
           <div class="d-grid gap-2">
-            <button class="btn btn-outline-info btn-sm">Oyla</button>
+            <button *ngIf="isLoggedIn" class="btn btn-outline-info btn-sm">Oyla</button>
+
             <a [routerLink]="['/results']" class="btn btn-outline-light btn-sm">Sonucu Gör</a>
           </div>
         </div>

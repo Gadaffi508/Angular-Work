@@ -7,4 +7,15 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'proje';
+
+  isLoggedIn = false;
+
+  ngOnInit(): void {
+    this.isLoggedIn = !!localStorage.getItem('user');
+  }
+
+  logout() {
+    localStorage.removeItem('user');
+    location.reload(); // sayfa yenile
+  }
 }

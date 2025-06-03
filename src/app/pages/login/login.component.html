@@ -1,0 +1,16 @@
+<div class="container d-flex justify-content-center align-items-center py-5">
+  <div class="card bg-dark text-white p-4 shadow" style="min-width: 400px; max-width: 500px; width: 100%;">
+    <h3 class="text-center mb-4"><span class="me-2">🔐</span>Giriş Yap</h3>
+    <form (ngSubmit)="login()">
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" [(ngModel)]="email" name="email" class="form-control bg-dark text-white border-secondary" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Şifre</label>
+        <input type="password" [(ngModel)]="password" name="password" class="form-control bg-dark text-white border-secondary" required>
+      </div>
+      <button type="submit" class="btn btn-success w-100">Giriş Yap</button>
+    </form>
+  </div>
+</div>

@@ -1,8 +1,39 @@
-<div class="container text-center py-5">
-  <h1 class="text-white mb-3">📢 Anket Sistemi</h1>
-  <p class="lead text-light">
-    Anket oluştur, paylaş, oyla ve sonuçları takip et! Modern arayüz ve gelişmiş seçeneklerle profesyonel anketler seni bekliyor.
+<div class="container py-5 text-center text-white">
+  <h1 class="display-5 mb-3">📢 Anket Sistemi Nedir?</h1>
+  <p class="lead">
+    Bu platform, kullanıcıların kolayca anket oluşturmasını, paylaşmasını ve topladığı oylarla sonuçları analiz etmesini
+    sağlar.
   </p>
-  <img src="assets/hero-image.png" alt="Anket" class="img-fluid my-4" style="max-width: 400px;">
-  <a routerLink="/polls" class="btn btn-outline-info btn-lg">Anketlere Göz At</a>
+
+  <hr class="border-secondary my-4" style="opacity: 0.3;">
+
+  <div class="row text-start mt-5">
+    <div class="col-md-6">
+      <h4>🎯 Ne İşe Yarar?</h4>
+      <ul>
+        <li>Çoktan seçmeli veya açık uçlu sorularla anket hazırlama</li>
+        <li>Gerçek zamanlı oy toplama</li>
+        <li>Grafikli sonuç analizi</li>
+        <li>Kullanıcı bazlı oy kontrolü</li>
+      </ul>
+    </div>
+    <div class="col-md-6">
+      <h4>🧩 Kimler Kullanmalı?</h4>
+      <ul>
+        <li>Öğrenciler (sınıf içi anketler)</li>
+        <li>Şirketler (müşteri veya çalışan anketi)</li>
+        <li>Bireyler (eğlenceli veya bilgi amaçlı anketler)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="mt-5">
+    <a [routerLink]="isLoggedIn ? '/polls' : '/login'" class="btn btn-outline-info btn-lg me-2"
+      [attr.title]="isLoggedIn ? 'Anketleri görüntüle' : 'Giriş yapmanız gerekiyor'">
+      Anketleri Gör
+    </a>
+
+    <a [routerLink]="isLoggedIn ? '/create' : '/login'" class="btn btn-success btn-lg"
+      [attr.title]="isLoggedIn ? 'Anket oluştur' : 'Giriş yapmanız gerekiyor'">Anket Oluştur</a>
+  </div>
 </div>

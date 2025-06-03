@@ -6,6 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./poll-list.component.css']
 })
 export class PollListComponent implements OnInit {
+
+  isLoggedIn = false;
+
   polls = [
     {
       title: 'En iyi oyun motoru hangisi?',
@@ -21,5 +24,7 @@ export class PollListComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.isLoggedIn = !!localStorage.getItem('user');
+  }
 }
