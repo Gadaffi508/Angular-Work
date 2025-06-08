@@ -6,7 +6,8 @@
       <div class="card bg-dark text-white border-secondary p-3">
         <div class="mb-3">
           <label class="form-label">Soru {{ i + 1 }}</label>
-          <input type="text" class="form-control bg-dark text-white border-secondary" [(ngModel)]="q.question" name="question{{i}}">
+          <input type="text" class="form-control bg-dark text-white border-secondary" [(ngModel)]="q.question"
+            name="question{{i}}">
         </div>
 
         <div class="mb-3">
@@ -20,8 +21,9 @@
 
         <div *ngIf="q.type !== 'text'">
           <label class="form-label">Seçenekler</label>
-          <div *ngFor="let opt of q.options; let j = index" class="mb-2">
-            <input type="text" class="form-control bg-dark text-white border-secondary" [(ngModel)]="q.options[j]" name="option{{i}}{{j}}">
+          <div *ngFor="let opt of q.options; let j = index; trackBy: trackByIndex" class="mb-2">
+            <input type="text" class="form-control bg-dark text-white border-secondary" [(ngModel)]="q.options[j]"
+              name="option{{i}}{{j}}">
           </div>
           <button type="button" class="btn btn-outline-light btn-sm" (click)="addOption(i)">+ Seçenek Ekle</button>
         </div>
@@ -33,7 +35,7 @@
     </div>
 
     <div class="col-12">
-      <button class="btn btn-success w-100">Anketi Oluştur</button>
+      <button class="btn btn-success w-100" (click)="savePoll()">Anketi Oluştur</button>
     </div>
   </form>
 </div>

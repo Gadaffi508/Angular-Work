@@ -9,10 +9,19 @@
         <div class="card-body">
           <h5 class="card-title text-info">{{ poll.title }}</h5>
           <p class="card-text">{{ poll.description }}</p>
-          <div class="d-grid gap-2">
-            <button *ngIf="isLoggedIn" class="btn btn-outline-info btn-sm">Oyla</button>
 
-            <a [routerLink]="['/results']" class="btn btn-outline-light btn-sm">Sonucu Gör</a>
+          <div *ngIf="poll.options?.length > 0">
+            <div *ngFor="let opt of poll.options; let i = index" class="form-check">
+              
+            </div>
+          </div>
+
+
+          <div class="d-grid gap-2">
+            <a [routerLink]="['/vote', poll.id]" class="btn btn-outline-info btn-sm">Oyla</a>
+
+
+            <a [routerLink]="['/results', poll.id]" class="btn btn-outline-light btn-sm">Sonucu Gör</a>
           </div>
         </div>
         <div class="card-footer text-muted small text-end">

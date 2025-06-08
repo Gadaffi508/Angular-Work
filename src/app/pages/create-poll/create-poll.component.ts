@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PollService } from 'src/app/services/poll.service';
 
 @Component({
   selector: 'app-create-poll',
@@ -15,7 +16,7 @@ export class CreatePollComponent implements OnInit {
     }
   ];
 
-  constructor() { }
+  constructor(private pollService: PollService) { }
 
   ngOnInit(): void { }
 
@@ -26,6 +27,25 @@ export class CreatePollComponent implements OnInit {
       options: ['', '']
     });
   }
+
+  trackByIndex(index: number, item: any): any {
+  return index;
+}
+
+  savePoll() {
+  const anket = this.polls.map(p => ({
+    question: p.question,
+    type: p.type,
+    options: p.type === 'text'
+      ? []
+      : p.options.map(opt => ({ option: opt, votes: 0 }))
+  }));
+
+  this.pollService.createPoll(anket).subscribe(() => {
+    alert('Anket başarıyla kaydedildi.');
+  });
+}
+
 
   addOption(questionIndex: number) {
     this.polls[questionIndex].options.push('');

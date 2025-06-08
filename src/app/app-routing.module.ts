@@ -7,14 +7,16 @@ import { AboutComponent } from './pages/about/about.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
+import { PollVoteComponent } from './poll-vote/poll-vote.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'polls', component: PollListComponent },
   { path: 'create', component: CreatePollComponent },
-  { path: 'results', component: PollResultComponent },
+  { path: 'results/:id', component: PollResultComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'vote/:id', component: PollVoteComponent },
   { path: 'about', component: AboutComponent },
 ];
 

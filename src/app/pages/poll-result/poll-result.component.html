@@ -7,16 +7,31 @@
           <strong>{{ result.title }}</strong>
         </div>
         <div class="card-body">
-          <div *ngFor="let opt of result.options" class="mb-3">
-            <h5 class="text-success">{{ opt.option }} - {{ opt.votes }} Oy</h5>
-            <div class="progress">
-              <div class="progress-bar bg-success" [style.width.%]="opt.percentage">
-                {{ opt.percentage }}%
+          <!-- Çoktan seçmeli sorular -->
+          <div *ngIf="result.options">
+            <div *ngFor="let opt of result.options" class="mb-3">
+              <h5 class="text-success">{{ opt.option }} - {{ opt.votes }} Oy</h5>
+              <div class="progress">
+                <div class="progress-bar bg-success" [style.width.%]="opt.percentage">
+                  {{ opt.percentage }}%
+                </div>
               </div>
             </div>
+          </div>
+
+          <!-- Açık uçlu sorular -->
+          <div *ngIf="result.textAnswers">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item bg-dark text-white border-secondary" *ngFor="let ans of result.textAnswers">
+                {{ ans }}
+              </li>
+            </ul>
           </div>
         </div>
       </div>
     </div>
+  </div>
+  <div class="text-center mt-4">
+    <button class="btn btn-outline-info" (click)="goBack()">⬅ Geri Dön</button>
   </div>
 </div>

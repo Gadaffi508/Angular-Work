@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -10,12 +11,22 @@ export class AppComponent {
 
   isLoggedIn = false;
 
+  userEmail = '';
+
+  constructor(private router: Router) { }
+
   ngOnInit(): void {
-    this.isLoggedIn = !!localStorage.getItem('user');
+    const email = localStorage.getItem('user');
+    this.isLoggedIn = !!email;
+    this.userEmail = email || '';
   }
 
   logout() {
     localStorage.removeItem('user');
-    location.reload(); // sayfa yenile
+    this.isLoggedIn = false;
+    this.userEmail = '';
+    this.router.navigate(['/']);
   }
+
+
 }
