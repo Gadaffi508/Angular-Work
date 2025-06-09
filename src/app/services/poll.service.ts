@@ -1,59 +1,126 @@
-// src/app/services/poll.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
-import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { from, Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PollService {
-  private dbUrl = `${environment.firebaseUrl}/anketler`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private firestore: AngularFirestore) { }
 
-  registerUser(user: { email: string, password: string }) {
-    return this.http.post(`${this.dbUrl}/users.json`, user);
+  createPoll(questions: any[]): Observable<any> {
+    const poll = {
+      questions,
+      createdAt: new Date(),
+      createdBy: localStorage.getItem('user')
+    };
+    return from(this.firestore.collection('polls').add(poll));
   }
 
-  loginUser(email: string, password: string): Observable<any> {
-    return this.http.get<{ [key: string]: any }>(`${this.dbUrl}/users.json`).pipe(
-      map(users => {
-        const matched = Object.entries(users || {}).find(([key, val]: any) =>
-          val.email === email && val.password === password
-        );
-        return matched ? matched[1] : null;
+  getPollsCreatedBy(email: string): Observable<any[]> {
+    return this.firestore.collection('polls', ref => ref.where('createdBy', '==', email))
+      .snapshotChanges()
+      .pipe(map(snaps => snaps.map(snap => ({
+        id: snap.payload.doc.id,
+        ...snap.payload.doc.data() as any
+      }))));
+  }
+
+  getPollsVotedBy(email: string): Observable<any[]> {
+    return this.firestore.collection('polls', ref => ref.where('votedBy', 'array-contains', email))
+      .snapshotChanges()
+      .pipe(map(snaps => snaps.map(snap => ({
+        id: snap.payload.doc.id,
+        ...snap.payload.doc.data() as any
+      }))));
+  }
+
+
+  getPolls(): Observable<any[]> {
+    return this.firestore.collection('polls').snapshotChanges().pipe(
+      map(snaps => snaps.map(snap => {
+        const data: any = snap.payload.doc.data();
+        return {
+          id: snap.payload.doc.id,
+          title: data.questions[0]?.question || 'Anket',
+          description: `${data.questions.length} sorudan oluşuyor.`,
+          endDate: '2025-07-01',
+          options: data.questions[0].options || []
+        };
+      }))
+    );
+  }
+
+  getPoll(id: string): Observable<any> {
+    return this.firestore.collection('polls').doc(id).valueChanges();
+  }
+
+  vote(pollId: string, questionIndex: number, selectedIndexOrText: any): Observable<any> {
+    const pollRef = this.firestore.collection('polls').doc(pollId);
+    const userEmail = localStorage.getItem('user');
+
+    return pollRef.get().pipe(
+      map(snapshot => {
+        const pollData: any = snapshot.data();
+        const updatedQuestions = [...pollData.questions];
+        const votedBy = pollData.votedBy || [];
+
+        if (updatedQuestions[questionIndex].type === 'text') {
+          updatedQuestions[questionIndex].answers = [
+            ...(updatedQuestions[questionIndex].answers || []),
+            selectedIndexOrText
+          ];
+        } else {
+          updatedQuestions[questionIndex].options[selectedIndexOrText].votes++;
+        }
+
+        if (!votedBy.includes(userEmail)) {
+          votedBy.push(userEmail);
+        }
+
+        pollRef.update({
+          questions: updatedQuestions,
+          votedBy
+        });
       })
     );
   }
 
-
-  getPolls(): Observable<any> {
-    return this.http.get(`${this.dbUrl}.json`);
-  }
-
-  createPoll(poll: any): Observable<any> {
-    return this.http.post(`${this.dbUrl}.json`, poll);
-  }
-
-  vote(pollId: string, questionIndex: number, optionIndex: number): Observable<any> {
-    const voteUrl = `${this.dbUrl}/${pollId}/${questionIndex}/options/${optionIndex}/votes.json`;
-
-    return this.http.get<number>(voteUrl).pipe(
-      switchMap((votes: number) => {
-        const updated = (votes || 0) + 1;
-        return this.http.put(voteUrl, updated);
-      })
+  getMyPolls(): Observable<any[]> {
+    const userEmail = localStorage.getItem('user');
+    return this.firestore.collection('polls', ref =>
+      ref.where('createdBy', '==', userEmail)
+    ).snapshotChanges().pipe(
+      map(snaps => snaps.map(snap => {
+        const data: any = snap.payload.doc.data();
+        return {
+          id: snap.payload.doc.id,
+          title: data.questions[0]?.question || 'Anket',
+          description: `${data.questions.length} sorudan oluşuyor.`,
+          endDate: '2025-07-01',
+          options: data.questions[0].options || []
+        };
+      }))
     );
   }
 
-  getPollById(id: string): Observable<any> {
-    return this.http.get(`${this.dbUrl}/${id}.json`);
-  }
-
-  getPoll(pollId: string): Observable<any> {
-    return this.http.get(`${this.dbUrl}/${pollId}.json`);
+  getMyVotedPolls(): Observable<any[]> {
+    const userEmail = localStorage.getItem('user');
+    return this.firestore.collection('polls', ref =>
+      ref.where('votedBy', 'array-contains', userEmail)
+    ).snapshotChanges().pipe(
+      map(snaps => snaps.map(snap => {
+        const data: any = snap.payload.doc.data();
+        return {
+          id: snap.payload.doc.id,
+          title: data.questions[0]?.question || 'Anket',
+          description: `${data.questions.length} sorudan oluşuyor.`,
+          options: data.questions[0].options || []
+        };
+      }))
+    );
   }
 
 }

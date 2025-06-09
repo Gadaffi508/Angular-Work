@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { PollService } from 'src/app/services/poll.service';
 
 @Component({
@@ -11,12 +12,12 @@ export class CreatePollComponent implements OnInit {
   polls = [
     {
       question: '',
-      type: 'multiple', // 'multiple', 'text', 'checkbox'
-      options: ['', '']
+      type: 'text',
+      options: ['']
     }
   ];
 
-  constructor(private pollService: PollService) { }
+  constructor(private pollService: PollService, private router: Router) { }
 
   ngOnInit(): void { }
 
@@ -29,22 +30,25 @@ export class CreatePollComponent implements OnInit {
   }
 
   trackByIndex(index: number, item: any): any {
-  return index;
-}
+    return index;
+  }
 
   savePoll() {
-  const anket = this.polls.map(p => ({
-    question: p.question,
-    type: p.type,
-    options: p.type === 'text'
-      ? []
-      : p.options.map(opt => ({ option: opt, votes: 0 }))
-  }));
+    const anketSorulari = this.polls.map(p => ({
+      question: p.question,
+      type: p.type,
+      options: p.type === 'text'
+        ? []
+        : p.options.map(opt => ({ option: opt, votes: 0 }))
+    }));
 
-  this.pollService.createPoll(anket).subscribe(() => {
-    alert('Anket başarıyla kaydedildi.');
-  });
-}
+    this.pollService.createPoll(anketSorulari).subscribe(() => {
+      alert('Anket oluşturuldu!');
+      this.router.navigate(['/polls']);
+    });
+
+  }
+
 
 
   addOption(questionIndex: number) {

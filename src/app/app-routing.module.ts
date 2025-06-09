@@ -8,15 +8,19 @@ import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { PollVoteComponent } from './poll-vote/poll-vote.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'polls', component: PollListComponent },
   { path: 'create', component: CreatePollComponent },
   { path: 'results/:id', component: PollResultComponent },
+  { path: 'poll-result/:id', component: PollResultComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'vote/:id', component: PollVoteComponent },
+  { path: 'profile', component: ProfileComponent },
+  { path: 'hesabim', component: ProfileComponent },
   { path: 'about', component: AboutComponent },
 ];
 

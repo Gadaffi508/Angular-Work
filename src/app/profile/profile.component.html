@@ -1,0 +1,23 @@
+<div class="container py-5 text-white">
+  <h2 class="mb-4">👤 Hesabım - {{ userEmail }}</h2>
+
+  <h4 class="text-info">📌 Oluşturduğum Anketler</h4>
+  <ul *ngIf="createdPolls.length > 0; else noCreated" class="list-group mb-4">
+    <li class="list-group-item bg-dark text-white border-info" *ngFor="let poll of createdPolls">
+      {{ poll.questions[0]?.question }}
+    </li>
+  </ul>
+  <ng-template #noCreated>
+    <p>Henüz anket oluşturmadınız.</p>
+  </ng-template>
+
+  <h4 class="text-success">🗳️ Katıldığım Anketler</h4>
+  <ul *ngIf="votedPolls.length > 0; else noVoted" class="list-group">
+    <li class="list-group-item bg-dark text-white border-success" *ngFor="let poll of votedPolls">
+      {{ poll.questions[0]?.question }}
+    </li>
+  </ul>
+  <ng-template #noVoted>
+    <p>Henüz oyladığınız bir anket yok.</p>
+  </ng-template>
+</div>

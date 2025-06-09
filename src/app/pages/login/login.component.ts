@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { PollService } from 'src/app/services/poll.service';
+import { AuthService } from 'src/app/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -10,19 +10,16 @@ export class LoginComponent {
   email = '';
   password = '';
 
-  constructor(private router: Router, private pollService: PollService) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   login() {
     if (!this.email || !this.password) return;
 
-    this.pollService.loginUser(this.email, this.password).subscribe(user => {
-      if (user) {
-        localStorage.setItem('user', this.email);
-        window.location.reload();
-      } else {
-        alert('Hatalı email ya da şifre!');
-      }
+    this.authService.login(this.email, this.password).subscribe(() => {
+      localStorage.setItem('user', this.email);
+      this.router.navigate(['/']);
+    }, error => {
+      alert("Giriş başarısız: " + error.message);
     });
   }
-
 }

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { PollService } from 'src/app/services/poll.service';
+import { AuthService } from 'src/app/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -10,14 +10,16 @@ export class RegisterComponent {
   email = '';
   password = '';
 
-  constructor(private router: Router, private pollService: PollService) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   register() {
     if (!this.email || !this.password) return;
 
-    this.pollService.registerUser({ email: this.email, password: this.password }).subscribe(() => {
+    this.authService.register(this.email, this.password).subscribe(() => {
       localStorage.setItem('user', this.email);
-      window.location.reload();
+      this.router.navigate(['/']);
+    }, error => {
+      alert("Kayıt başarısız: " + error.message);
     });
   }
 }
