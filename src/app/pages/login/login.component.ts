@@ -15,11 +15,12 @@ export class LoginComponent {
   login() {
     if (!this.email || !this.password) return;
 
-    this.authService.login(this.email, this.password).subscribe(() => {
+    this.authService.login(this.email, this.password).subscribe(res => {
       localStorage.setItem('user', this.email);
       this.router.navigate(['/']);
-    }, error => {
-      alert("Giriş başarısız: " + error.message);
-    });
+    }
+      , error => {
+        alert("Giriş başarısız: " + error.message);
+      });
   }
 }

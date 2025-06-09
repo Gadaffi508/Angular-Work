@@ -20,6 +20,7 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { environment } from 'src/environments/environment';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { RouterModule } from '@angular/router';
     HomeComponent,
     LoginComponent,
     RegisterComponent,
-    PollVoteComponent
+    PollVoteComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
