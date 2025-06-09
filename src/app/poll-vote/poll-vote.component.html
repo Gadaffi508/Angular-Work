@@ -8,20 +8,28 @@
       <!-- Çoktan Seçmeli (radio) -->
       <div *ngIf="q.type === 'multiple'" class="mt-3">
         <div *ngFor="let opt of q.options; let oi = index" class="form-check">
-          <input class="form-check-input" type="radio"
-                 [name]="'question' + qi" [value]="oi"
-                 [(ngModel)]="answers[qi]" [id]="'opt' + qi + '_' + oi">
+          <input class="form-check-input" type="radio" [name]="'question' + qi" [value]="oi" [(ngModel)]="answers[qi]"
+            [id]="'opt' + qi + '_' + oi">
           <label class="form-check-label" [for]="'opt' + qi + '_' + oi">{{ opt.option }}</label>
         </div>
       </div>
 
+      <!-- Çoklu Seçim (checkbox) -->
+      <div *ngIf="q.type === 'checkbox'" class="mt-3">
+        <div *ngFor="let opt of q.options; let oi = index" class="form-check">
+          <input class="form-check-input" type="checkbox" [checked]="answers[qi]?.includes(oi)"
+            (change)="onCheckboxChange(qi, oi, $event)">
+          <label class="form-check-label">{{ opt.option }}</label>
+        </div>
+      </div>
+
+
+
+
       <!-- Açık Uçlu (textarea) -->
       <div *ngIf="q.type === 'text'" class="mt-3">
-        <textarea class="form-control bg-dark text-white border-secondary"
-                  rows="3"
-                  [(ngModel)]="answers[qi]"
-                  [name]="'question' + qi"
-                  placeholder="Cevabınızı buraya yazın..."></textarea>
+        <textarea class="form-control bg-dark text-white border-secondary" rows="3" [(ngModel)]="answers[qi]"
+          [name]="'question' + qi" placeholder="Cevabınızı buraya yazın..."></textarea>
       </div>
     </div>
   </div>

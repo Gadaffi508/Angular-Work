@@ -27,6 +27,20 @@ export class PollVoteComponent implements OnInit {
     });
   }
 
+  onCheckboxChange(qi: number, oi: number, event: any) {
+    if (!this.answers[qi]) this.answers[qi] = [];
+
+    if (event.target.checked) {
+      this.answers[qi].push(oi);
+    } else {
+      const index = this.answers[qi].indexOf(oi);
+      if (index >= 0) {
+        this.answers[qi].splice(index, 1);
+      }
+    }
+  }
+
+
   goBack() {
     this.location.back();
   }

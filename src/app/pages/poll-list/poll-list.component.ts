@@ -14,12 +14,14 @@ export class PollListComponent implements OnInit {
   constructor(private pollService: PollService,private router:Router) { }
 
   ngOnInit(): void {
-    this.isLoggedIn = !!localStorage.getItem('user');
+  this.polls = [];
+  this.isLoggedIn = !!localStorage.getItem('user');
 
-    this.pollService.getPolls().subscribe((data) => {
-      this.polls = data;
-    });
-  }
+  this.pollService.getPolls().subscribe((data) => {
+    this.polls = data;
+  });
+}
+
 
   goToResult(id: string) {
   this.router.navigate(['/poll-result', id]);

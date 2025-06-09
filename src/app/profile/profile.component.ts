@@ -15,8 +15,16 @@ export class ProfileComponent implements OnInit {
   constructor(private pollService: PollService) { }
 
   ngOnInit(): void {
-    this.pollService.getMyPolls().subscribe(data => this.createdPolls = data);
-    this.pollService.getMyVotedPolls().subscribe(data => this.votedPolls = data);
+    this.userEmail = localStorage.getItem('user') || '';
+
+    this.pollService.getMyPolls().subscribe(data => {
+      this.createdPolls = data;
+    });
+
+    this.pollService.getMyVotedPolls().subscribe(data => {
+      this.votedPolls = data;
+    });
   }
+
 
 }

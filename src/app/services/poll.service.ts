@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { from, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -61,17 +62,22 @@ export class PollService {
     const pollRef = this.firestore.collection('polls').doc(pollId);
     const userEmail = localStorage.getItem('user');
 
-    return pollRef.get().pipe(
-      map(snapshot => {
+    return new Observable(observer => {
+      pollRef.get().subscribe(snapshot => {
         const pollData: any = snapshot.data();
+        if (!pollData) {
+          observer.error('Anket verisi bulunamadı.');
+          return;
+        }
+
         const updatedQuestions = [...pollData.questions];
         const votedBy = pollData.votedBy || [];
 
         if (updatedQuestions[questionIndex].type === 'text') {
-          updatedQuestions[questionIndex].answers = [
-            ...(updatedQuestions[questionIndex].answers || []),
-            selectedIndexOrText
-          ];
+          if (!updatedQuestions[questionIndex].answers) {
+            updatedQuestions[questionIndex].answers = [];
+          }
+          updatedQuestions[questionIndex].answers.push(selectedIndexOrText);
         } else {
           updatedQuestions[questionIndex].options[selectedIndexOrText].votes++;
         }
@@ -83,9 +89,12 @@ export class PollService {
         pollRef.update({
           questions: updatedQuestions,
           votedBy
-        });
-      })
-    );
+        }).then(() => {
+          observer.next(true);
+          observer.complete();
+        }).catch(error => observer.error(error));
+      }, error => observer.error(error));
+    });
   }
 
   getMyPolls(): Observable<any[]> {
@@ -95,12 +104,13 @@ export class PollService {
     ).snapshotChanges().pipe(
       map(snaps => snaps.map(snap => {
         const data: any = snap.payload.doc.data();
+        const firstQuestion = data.questions && data.questions.length > 0 ? data.questions[0] : {};
         return {
           id: snap.payload.doc.id,
-          title: data.questions[0]?.question || 'Anket',
-          description: `${data.questions.length} sorudan oluşuyor.`,
+          title: firstQuestion?.question || 'Anket',
+          description: `${data.questions?.length || 0} sorudan oluşuyor.`,
           endDate: '2025-07-01',
-          options: data.questions[0].options || []
+          options: Array.isArray(firstQuestion?.options) ? firstQuestion.options : []
         };
       }))
     );

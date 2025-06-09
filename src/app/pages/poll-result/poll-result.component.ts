@@ -21,12 +21,12 @@ export class PollResultComponent implements OnInit {
     const pollId = this.route.snapshot.paramMap.get('id')!;
     if (!pollId) return;
 
-    this.pollService.getPoll(pollId).subscribe((data) => {
+    this.pollService.getPoll(pollId).subscribe((data: any) => {
       this.results = data.questions.map((q: any) => {
         if (q.type === 'text') {
           return {
             title: q.question,
-            textAnswers: q.answers || []
+            textAnswers: Array.isArray(q.answers) ? q.answers : []
           };
         } else {
           const totalVotes = q.options.reduce((sum: number, opt: any) => sum + (opt.votes || 0), 0);

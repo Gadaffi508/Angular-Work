@@ -34,24 +34,28 @@ export class CreatePollComponent implements OnInit {
   }
 
   savePoll() {
-    const anketSorulari = this.polls.map(p => ({
-      question: p.question,
-      type: p.type,
-      options: p.type === 'text'
-        ? []
-        : p.options.map(opt => ({ option: opt, votes: 0 }))
-    }));
+  const anketSorulari = this.polls.map(p => ({
+    question: p.question,
+    type: p.type,
+    options: p.type === 'text'
+      ? []  // text tipi için boş dizi verilmeli
+      : p.options.filter(opt => opt.trim() !== '').map(opt => ({ option: opt, votes: 0 }))
+  }));
 
-    this.pollService.createPoll(anketSorulari).subscribe(() => {
-      alert('Anket oluşturuldu!');
-      this.router.navigate(['/polls']);
-    });
+  this.pollService.createPoll(anketSorulari).subscribe(() => {
+    alert('Anket oluşturuldu!');
+    this.router.navigate(['/polls']);
+  }, (error) => {
+    console.error('Anket oluşturma hatası:', error);
+    alert('Anket oluşturulurken bir hata oluştu.');
+  });
+}
 
-  }
 
 
 
-  addOption(questionIndex: number) {
-    this.polls[questionIndex].options.push('');
-  }
+
+addOption(questionIndex: number) {
+  this.polls[questionIndex].options.push('');
+}
 }
