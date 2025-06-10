@@ -21,7 +21,13 @@ export class PollVoteComponent implements OnInit {
 
   ngOnInit(): void {
     this.pollId = this.route.snapshot.paramMap.get('id')!;
+    const currentUserEmail = localStorage.getItem('user');
     this.pollService.getPoll(this.pollId).subscribe((pollData) => {
+      if (pollData.votedBy && pollData.votedBy.includes(currentUserEmail)) {
+        alert("Bu ankete daha önce oy verdiniz. Sonuçlar sayfasına yönlendiriliyorsunuz.");
+        this.router.navigate(['/results', this.pollId]);
+        return; // Component'in geri kalanının çalışmasını engelle
+      }
       this.questions = pollData.questions;
       this.answers = this.questions.map(() => '');
     });

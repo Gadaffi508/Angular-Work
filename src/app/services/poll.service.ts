@@ -24,6 +24,10 @@ export class PollService {
     return from(this.firestore.collection('polls').add(poll));
   }
 
+  deletePoll(pollId: string): Observable<void> {
+    return from(this.firestore.collection('polls').doc(pollId).delete());
+  }
+
   updateSearchTerm(term: string) {
     this.searchTermSubject.next(term.toLowerCase());
   }
