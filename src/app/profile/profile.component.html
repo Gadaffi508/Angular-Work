@@ -1,11 +1,23 @@
 <div class="container py-5 text-white">
   <h2 class="mb-4">👤 Hesabım - {{ userEmail }}</h2>
 
+  <div class="card bg-dark border-secondary mb-4 shadow" style="max-width: 500px; margin: auto;">
+    <div class="card-body">
+      <h5 class="card-title text-center text-warning mb-3">📊 Anket Etkileşim Grafiği</h5>
+      <canvas baseChart
+              [data]="doughnutChartData"
+              [type]="doughnutChartType"
+              [options]="doughnutChartOptions"
+              style="height: 250px;"></canvas>
+    </div>
+  </div>
+
+
   <h4 class="text-info">📌 Oluşturduğum Anketler</h4>
   <ng-container *ngIf="createdPolls.length > 0; else noCreated">
     <ul class="list-group mb-4">
       <li class="list-group-item bg-dark text-white border-info d-flex justify-content-between align-items-center"
-          *ngFor="let poll of createdPolls">
+        *ngFor="let poll of createdPolls">
         <span>{{ poll.title }}</span>
         <div class="d-flex gap-2">
           <button class="btn btn-outline-light btn-sm" (click)="goToResult(poll.id)">Ankete Git</button>

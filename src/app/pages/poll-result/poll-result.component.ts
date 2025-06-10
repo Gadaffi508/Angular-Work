@@ -14,6 +14,32 @@ export class PollResultComponent implements OnInit {
 
   barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
+    plugins: {
+      legend: {
+        display: true, // Display legend (e.g., "Oy Sayısı")
+        labels: {
+          color: 'white' // Make legend labels visible on dark background
+        }
+      }
+    },
+    scales: { // Ensure axes are visible on dark background
+      x: {
+        ticks: {
+          color: 'white'
+        },
+        grid: {
+          color: 'rgba(255, 255, 255, 0.1)' // Lighten grid lines
+        }
+      },
+      y: {
+        ticks: {
+          color: 'white'
+        },
+        grid: {
+          color: 'rgba(255, 255, 255, 0.1)' // Lighten grid lines
+        }
+      }
+    }
   };
   barChartLabels: string[] = [];
   barChartData: any[] = [];
@@ -29,26 +55,59 @@ export class PollResultComponent implements OnInit {
     if (!pollId) return;
 
     this.pollService.getPoll(pollId).subscribe((data: any) => {
+
+      const firstMultipleChoiceQuestion = data.questions.find((q: any) => q.type !== 'text');
+
+      if (firstMultipleChoiceQuestion) {
+        this.barChartLabels = firstMultipleChoiceQuestion.options.map((o: any) => o.option);
+        this.barChartData = [
+          { data: firstMultipleChoiceQuestion.options.map((o: any) => o.votes || 0), label: 'Oy Sayısı' }
+        ];
+      }
+
       this.results = data.questions.map((q: any) => {
         if (q.type === 'text') {
+          const answers = Array.isArray(q.answers) ? q.answers : [];
+
+          const frequencyMap: { [key: string]: number } = {};
+          for (const ans of answers) {
+            const word = ans.toLowerCase().trim();
+            frequencyMap[word] = (frequencyMap[word] || 0) + 1;
+          }
+
+          const labels = Object.keys(frequencyMap);
+          const values = Object.values(frequencyMap);
+
           return {
             title: q.question,
-            textAnswers: Array.isArray(q.answers) ? q.answers : []
+            textAnswers: answers,
+            isText: true,
+            chartLabels: labels,
+            chartData: [{
+              data: values,
+              label: 'Cevap Sıklığı',
+              backgroundColor: 'rgba(255, 99, 132, 0.6)',
+              borderColor: 'rgba(255, 99, 132, 1)',
+              borderWidth: 1
+            }]
           };
         } else {
           const totalVotes = q.options.reduce((sum: number, opt: any) => sum + (opt.votes || 0), 0);
-          const question = data.questions[0];
-          this.barChartLabels = question.options.map((o: any) => o.option);
-          this.barChartData = [
-            { data: question.options.map((o: any) => o.votes || 0), label: 'Oy Sayısı' }
-          ];
           return {
             title: q.question,
             options: q.options.map((opt: any) => ({
               option: opt.option,
               votes: opt.votes || 0,
               percentage: totalVotes > 0 ? Math.round((opt.votes || 0) * 100 / totalVotes) : 0,
-            }))
+            })),
+            chartLabels: (q.options || []).map((o: any) => o.option),
+            chartData: [{
+              data: (q.options || []).map((o: any) => o.votes || 0),
+              label: 'Oy Sayısı',
+              backgroundColor: 'rgba(75, 192, 192, 0.6)',
+              borderColor: 'rgba(75, 192, 192, 1)',
+              borderWidth: 1
+            }]
           };
         }
       });

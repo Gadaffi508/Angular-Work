@@ -17,6 +17,11 @@
                 </div>
               </div>
             </div>
+            <div style="display: block; margin-top: 20px;">
+              <canvas baseChart [datasets]="result.chartData" [labels]="result.chartLabels" [options]="barChartOptions"
+                [type]="'bar'">
+              </canvas>
+            </div>
           </div>
 
           <!-- Açık uçlu sorular -->
@@ -26,6 +31,11 @@
                 {{ ans }}
               </li>
             </ul>
+          </div>
+          <div *ngIf="result.isText" style="display: block; margin-top: 10px;">
+            <canvas baseChart [datasets]="result.chartData" [labels]="result.chartLabels" [options]="barChartOptions"
+              [type]="'bar'">
+            </canvas>
           </div>
           <div *ngIf="result.textAnswers?.length === 0">
             <p class="text-muted">Henüz cevap yok.</p>
