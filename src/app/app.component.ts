@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
 import { CommonModule } from '@angular/common';
+import { PollService } from './services/poll.service';
 
 @Component({
   selector: 'app-root',
@@ -12,13 +13,23 @@ export class AppComponent implements OnInit {
   title = 'proje';
   isLoggedIn = false;
   userEmail = '';
+  searchTerm = '';
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router, private pollService: PollService) { }
 
   ngOnInit(): void {
     const email = localStorage.getItem('user');
     this.isLoggedIn = !!email;
     this.userEmail = email || '';
+  }
+
+  onSearchLive() {
+    this.pollService.updateSearchTerm(this.searchTerm);
+  }
+
+  onSearch(event: Event) {
+    event.preventDefault();
+    this.pollService.updateSearchTerm(this.searchTerm);
   }
 
   ngDoCheck(): void {
@@ -27,7 +38,7 @@ export class AppComponent implements OnInit {
     this.userEmail = email || '';
   }
 
-  goAccount(){
+  goAccount() {
     this.router.navigate(['/hesabim'])
   }
 

@@ -5,9 +5,12 @@
   <ng-container *ngIf="createdPolls.length > 0; else noCreated">
     <ul class="list-group mb-4">
       <li class="list-group-item bg-dark text-white border-info d-flex justify-content-between align-items-center"
-        *ngFor="let poll of createdPolls">
-        {{ poll.title }}
-        <button class="btn btn-outline-light btn-sm" (click)="goToResult(poll.id)">Ankete Git</button>
+          *ngFor="let poll of createdPolls">
+        <span>{{ poll.title }}</span>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-light btn-sm" (click)="goToResult(poll.id)">Ankete Git</button>
+          <button class="btn btn-outline-warning btn-sm" (click)="editPoll(poll.id)">Düzenle</button>
+        </div>
       </li>
     </ul>
   </ng-container>

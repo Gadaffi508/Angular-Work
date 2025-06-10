@@ -3,10 +3,10 @@
     <a class="navbar-brand" routerLink="/">Anket Sistemi</a>
 
     <div class="collapse navbar-collapse justify-content-center">
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Ara" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Ara</button>
+      <form class="d-flex" role="search" (submit)="onSearch($event)">
+        <input class="form-control me-2" type="search" placeholder="Ara" [(ngModel)]="searchTerm" name="search" (ngModelChange)="onSearchLive()" />
       </form>
+
     </div>
 
     <div class="d-flex">

@@ -19,6 +19,11 @@ export class ProfileComponent implements OnInit {
     this.router.navigate(['/poll-result', pollId]);
   }
 
+  editPoll(pollId: string) {
+    this.router.navigate(['/edit', pollId]);
+  }
+
+
   ngOnInit(): void {
     const email = localStorage.getItem('user');
     if (!email) return;

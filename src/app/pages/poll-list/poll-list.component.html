@@ -1,7 +1,7 @@
 <div class="container py-5">
   <h2 class="text-center text-white mb-4">📋 Aktif Anketler</h2>
   <div class="row g-4">
-    <div class="col-sm-6 col-md-4 col-lg-3" *ngFor="let poll of polls; let i = index">
+    <div class="col-sm-6 col-md-4 col-lg-3" *ngFor="let poll of filteredPolls; let i = index">
       <div class="card text-white bg-dark h-100 shadow">
         <div class="card-header border-info">
           <strong>Anket #{{ i + 1 }}</strong>
@@ -9,12 +9,6 @@
         <div class="card-body">
           <h5 class="card-title text-info">{{ poll.title }}</h5>
           <p class="card-text">{{ poll.description }}</p>
-
-          <div *ngIf="poll.options?.length > 0">
-            <div *ngFor="let opt of poll.options; let i = index" class="form-check">
-
-            </div>
-          </div>
 
           <div *ngIf="polls.length === 0" class="text-center text-white my-5">
             <div class="spinner-border text-light" role="status"></div>

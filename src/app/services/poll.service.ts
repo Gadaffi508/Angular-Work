@@ -3,6 +3,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { from, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,9 @@ export class PollService {
 
   constructor(private firestore: AngularFirestore) { }
 
+  private searchTermSubject = new BehaviorSubject<string>('');
+  searchTerm$ = this.searchTermSubject.asObservable();
+
   createPoll(questions: any[]): Observable<any> {
     const poll = {
       questions,
@@ -18,6 +22,14 @@ export class PollService {
       createdBy: localStorage.getItem('user')
     };
     return from(this.firestore.collection('polls').add(poll));
+  }
+
+  updateSearchTerm(term: string) {
+    this.searchTermSubject.next(term.toLowerCase());
+  }
+
+  updatePoll(pollId: string, questions: any[]): Observable<any> {
+    return from(this.firestore.collection('polls').doc(pollId).update({ questions }));
   }
 
   getPollsCreatedBy(email: string): Observable<any[]> {

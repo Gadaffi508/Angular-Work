@@ -21,6 +21,7 @@ const routes: Routes = [
   { path: 'vote/:id', component: PollVoteComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'hesabim', component: ProfileComponent },
+  { path: 'edit/:id', component: CreatePollComponent },
   { path: 'about', component: AboutComponent },
 ];
 
