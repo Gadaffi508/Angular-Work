@@ -1,6 +1,14 @@
 <div class="container py-5">
   <h2 class="text-center text-white mb-4">📋 Aktif Anketler</h2>
-  <div class="row g-4">
+
+  <!-- 🟡 Yükleniyor ekranı -->
+  <div *ngIf="loading" class="text-center text-white my-5">
+    <div class="spinner-border text-light" role="status"></div>
+    <p class="mt-2">Anketler yükleniyor...</p>
+  </div>
+
+  <!-- 🟢 Anketler yüklendi ve varsa göster -->
+  <div class="row g-4" *ngIf="!loading && filteredPolls.length > 0">
     <div class="col-sm-6 col-md-4 col-lg-3" *ngFor="let poll of filteredPolls; let i = index">
       <div class="card text-white bg-dark h-100 shadow">
         <div class="card-header border-info">
@@ -10,19 +18,12 @@
           <h5 class="card-title text-info">{{ poll.title }}</h5>
           <p class="card-text">{{ poll.description }}</p>
 
-          <div *ngIf="polls.length === 0" class="text-center text-white my-5">
-            <div class="spinner-border text-light" role="status"></div>
-            <p class="mt-2">Anketler yükleniyor...</p>
-          </div>
-
           <div class="d-grid gap-2">
             <a [routerLink]="isLoggedIn ? ['/vote', poll.id] : null" class="btn btn-outline-info btn-sm"
               [class.disabled]="!isLoggedIn" [attr.title]="isLoggedIn ? 'Oyla' : 'Giriş yapmanız gerekli'">
               Oyla
             </a>
-
             <button (click)="goToResult(poll.id)" class="btn btn-outline-info btn-sm">Sonucu Gör</button>
-
           </div>
         </div>
         <div class="card-footer text-muted small text-end">
@@ -30,5 +31,10 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- 🔴 Hiç anket yoksa -->
+  <div *ngIf="!loading && filteredPolls.length === 0" class="text-white text-center">
+    <p>Şu anda gösterilecek anket bulunamadı.</p>
   </div>
 </div>

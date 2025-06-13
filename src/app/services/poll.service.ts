@@ -56,19 +56,22 @@ export class PollService {
 
 
   getPolls(): Observable<any[]> {
-    return this.firestore.collection('polls').snapshotChanges().pipe(
-      map(snaps => snaps.map(snap => {
-        const data: any = snap.payload.doc.data();
-        return {
-          id: snap.payload.doc.id,
-          title: data.questions[0]?.question || 'Anket',
-          description: `${data.questions.length} sorudan oluşuyor.`,
-          endDate: '2025-07-01',
-          options: data.questions[0].options || []
-        };
-      }))
-    );
-  }
+  return this.firestore.collection('polls').snapshotChanges().pipe(
+    map(snaps => snaps.map(snap => {
+      const data: any = snap.payload.doc.data();
+      const firstQuestion = Array.isArray(data.questions) && data.questions.length > 0 ? data.questions[0] : null;
+
+      return {
+        id: snap.payload.doc.id,
+        title: firstQuestion?.question || 'Anket',
+        description: `${data.questions?.length || 0} sorudan oluşuyor.`,
+        endDate: '2025-07-01',
+        options: Array.isArray(firstQuestion?.options) ? firstQuestion.options : []
+      };
+    }))
+  );
+}
+
 
   getPoll(id: string): Observable<any> {
     return this.firestore.collection('polls').doc(id).valueChanges();

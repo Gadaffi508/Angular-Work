@@ -28,10 +28,8 @@
   </div>
 
   <div class="mt-5">
-    <a [routerLink]="isLoggedIn ? '/polls' : '/login'" class="btn btn-outline-info btn-lg me-2"
-      [attr.title]="isLoggedIn ? 'Anketleri görüntüle' : 'Giriş yapmanız gerekiyor'">
-      Anketleri Gör
-    </a>
+
+    <a routerLink= '/polls' class="btn btn-outline-info btn-lg me-2">Anketleri Gör</a>
 
     <a [routerLink]="isLoggedIn ? '/create' : '/login'" class="btn btn-success btn-lg"
       [attr.title]="isLoggedIn ? 'Anket oluştur' : 'Giriş yapmanız gerekiyor'">Anket Oluştur</a>
